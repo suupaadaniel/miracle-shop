@@ -46,22 +46,26 @@ body{background:var(--paper);color:var(--ink);font-family:Montserrat,system-ui,s
 .chip{flex:none;border:1px solid var(--ink);border-radius:30px;padding:8px 14px;font:500 11px Montserrat,system-ui,sans-serif;letter-spacing:.08em;background:none;color:var(--ink);text-transform:uppercase}
 .chip.on{background:var(--ink);color:var(--paper)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:26px 14px;padding:0 18px}
-.it{cursor:pointer}
+.it{cursor:pointer;display:flex;flex-direction:column}
 .it.wide{grid-column:span 2}.it{content-visibility:auto;contain-intrinsic-size:auto 420px}
 .it .ph{position:relative;overflow:hidden;background:#e7dccd;aspect-ratio:4/5}
 .it.wide .ph{aspect-ratio:4/4.4}
 .it img{width:100%;height:100%;object-fit:cover;display:block;color:transparent;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
 .it .no{position:absolute;top:10px;left:10px;font-family:'Cormorant Garamond';font-size:15px;color:#fbf4ea;text-shadow:0 1px 6px rgba(0,0,0,.35)}
 .it .fam{position:absolute;top:10px;right:10px;background:rgba(250,246,240,.9);font-size:9px;letter-spacing:.18em;text-transform:uppercase;padding:5px 8px;border-radius:20px}
-.it .b{padding-top:10px}
+.it .b{padding-top:10px;flex:1;display:flex;flex-direction:column}.it .b .row{margin-top:auto;padding-top:8px}
 .it .br{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
 .it .nm{font-family:'Cormorant Garamond';font-size:23px;font-weight:600;line-height:1;margin-top:4px}
 .it.wide .nm{font-size:34px}
 .it .nt{font-size:11px;color:#6b5848;margin-top:5px;line-height:1.4}
 .it .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
 .price{font-weight:600;font-size:13px}
-.add{width:34px;height:34px;border-radius:50%;border:1px solid var(--ink);background:none;color:var(--ink);font-size:18px;line-height:1;transition:.3s}
-.add:active{background:var(--ink);color:var(--paper)}
+.add{display:block;width:100%;margin-top:10px;padding:11px 8px;border-radius:40px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font:600 12px Montserrat,system-ui,sans-serif;letter-spacing:.02em;transition:transform .2s}
+.add:active{transform:scale(.97)}
+.qn{display:flex;align-items:center;justify-content:space-between;margin:2px 0 6px;padding:6px 6px 6px 16px;border:1px solid var(--line);border-radius:40px;font:500 13px Montserrat,system-ui,sans-serif}
+.qn div{display:flex;align-items:center;gap:14px;font-weight:600}.qn button{width:36px;height:36px;border-radius:50%;border:1px solid var(--ink);background:none;font-size:18px;color:var(--ink)}
+.tst{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:12px 16px;border-radius:12px;font:500 13px Montserrat,system-ui,sans-serif;z-index:99;white-space:nowrap;animation:tin .25s}
+@keyframes tin{from{opacity:0;transform:translate(-50%,10px)}}
 .quote{margin:50px 18px 0;padding:34px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);text-align:center}
 .quote p{font-family:'Cormorant Garamond';font-style:italic;font-size:30px;line-height:1.15}
 .how{padding:30px 18px 0}
@@ -163,11 +167,43 @@ input,textarea{width:100%;padding:13px 14px;border-radius:12px;border:1px solid 
 input,textarea{font-size:16px!important}
 .promo{display:flex;gap:8px}.promo input{flex:1;text-transform:uppercase;letter-spacing:.08em}.promo button{border:1px solid var(--ink);background:none;border-radius:12px;padding:0 16px;font:500 13px Montserrat,system-ui,sans-serif;color:var(--ink)}
 .pcm{font-size:12px;margin-top:8px;min-height:1px}.pcm.good{color:#4f7a3a}.pcm.bad{color:#b0473a}
+
+.qban{margin:8px 18px 26px;border-radius:22px;background:var(--ink);color:var(--paper);padding:22px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;position:relative;overflow:hidden}
+.qban:active{transform:scale(.985)}
+.qban .qi{flex:none;width:64px;height:80px;border-radius:10px;overflow:hidden;background:#3a2c20}.qban .qi img{width:100%;height:100%;object-fit:cover}
+.qban .qt{flex:1}.qban .qt .cap{color:#c9ab8a}.qban h4{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:26px;line-height:1.02;margin-top:6px}.qban h4 i{color:#e0b98c}
+.qban .qb{display:inline-block;margin-top:12px;background:var(--paper);color:var(--ink);border-radius:30px;padding:9px 16px;font:600 12px Montserrat,system-ui,sans-serif}
+.herob2{margin-left:0;display:block;background:none!important;color:#fbf4ea!important;border:1px solid rgba(251,244,234,.7)!important}
+.qz{padding:20px 18px 6px}
+.qz .top{display:flex;justify-content:space-between;align-items:center;margin:6px 40px 14px 0}
+.qz .qbar{height:2px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:22px}.qz .qbar i{display:block;height:100%;background:var(--ink);transition:width .5s cubic-bezier(.2,.7,.2,1)}
+.qz .scr{animation:qin .45s cubic-bezier(.2,.7,.2,1)}@keyframes qin{from{opacity:0;transform:translateY(14px)}}
+.qz h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:36px;line-height:1.02}.qz h2 i{color:var(--acc,#9a6a3e)}
+.qz .qs{font-size:13px;color:#4a3a2c;line-height:1.6;margin-top:10px}
+.qz .opts{display:grid;gap:10px;margin-top:20px}
+.qz .opt{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:var(--card,#faf6f0);border:1px solid var(--line);border-radius:16px;padding:13px 16px;font:500 14px Montserrat,system-ui,sans-serif;color:var(--ink);cursor:pointer;transition:transform .2s,background .2s}
+.qz .opt:active{transform:scale(.98)}.qz .opt.sel{border-color:var(--ink);background:#efe4d4}
+.qz .ic{flex:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;color:#9a6a3e;background:#efe6da}
+.qz .opt small{display:block;font-weight:400;font-size:12px;color:var(--soft);margin-top:2px}
+.qz .back{background:none;border:none;font:500 12px Montserrat,system-ui,sans-serif;color:var(--soft);padding:6px 0}
+.qz .qhero{border-radius:14px;overflow:hidden;aspect-ratio:4/5;max-height:44vh;width:100%;margin:18px 0}.qz .qhero img{width:100%;height:100%;object-fit:cover;display:block}
+.qz .win{background:var(--card,#faf6f0);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:16px}
+.qz .win img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}.qz .win .b{padding:16px}
+.qz .br{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+.qz .nm{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px;line-height:1;margin-top:6px}
+.qz .nt{font-size:12.5px;color:#4a3a2c;margin-top:8px;line-height:1.5}
+.qz .why{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.qz .why span{font-size:10.5px;padding:5px 9px;border-radius:20px;background:#efe4d4;color:var(--soft)}
+.qz .match{position:absolute;margin:12px;background:rgba(250,246,240,.92);border-radius:20px;padding:6px 10px;font-size:11px;font-weight:600}
+.qz .alts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.qz .qa{background:var(--card,#faf6f0);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;padding:0;font:inherit;color:inherit;cursor:pointer}
+.qz .qa img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}.qz .qa div{padding:10px}.qz .qa .nm{font-size:20px}
+.qz .qrow{display:flex;gap:10px;margin-top:12px}.qz .qrow .big{flex:1;margin-top:0}
+.qz .gh{background:none;color:var(--ink);border:1px solid var(--ink)}
 </style></head><body>
 <div class="mast"><span class="cap">Выпуск N°1</span><span class="cap">Коллекция 2026</span></div>
 <div class="logo"><h1><span style="animation-delay:.05s">M</span><span style="animation-delay:.1s">I</span><span style="animation-delay:.15s">R</span><span style="animation-delay:.2s">A</span><span style="animation-delay:.25s">C</span><span style="animation-delay:.3s">L</span><span style="animation-delay:.35s">E</span></h1></div>
 <div class="sub"><span class="cap">of fragrance</span><span class="cap">Extrait de Parfum</span></div>
-<div class="hero"><img id="heroimg" alt=""><div class="t"><div class="cap" style="color:#ead6bc">Главный аромат выпуска</div><h2>Gaba. <i>Свежесть, которая остаётся</i></h2><p>Масляные духи по мотивам любимых нишевых ароматов. Гарантия стойкости.</p><button class="herob" onclick="goCat()">Смотреть каталог</button></div></div>
+<div class="hero"><img id="heroimg" alt=""><div class="t"><div class="cap" style="color:#ead6bc">Главный аромат выпуска</div><h2>Gaba. <i>Свежесть, которая остаётся</i></h2><p>Масляные духи по мотивам любимых нишевых ароматов. Гарантия стойкости.</p><button class="herob" onclick="goCat()">Смотреть каталог</button><button class="herob herob2" onclick="openQuiz()">Подобрать аромат</button></div></div>
 <div class="ticker"><div id="tk"></div></div>
 <div class="intro rv"><div class="num">157</div><p>ароматов в новой коллекции. Каждый создан на масляной основе в концентрации Extrait de Parfum: он мягко ложится на кожу и раскрывается постепенно.</p></div>
 <div class="facts rv"><div><b>23 · 30</b>мл, флакон-спрей</div><div><b>1 500 ₽</b>цена от</div><div><b>РФ</b>СДЭК · Яндекс · Ozon</div></div>
@@ -175,6 +211,7 @@ input,textarea{font-size:16px!important}
 <div class="halo"></div><div class="shadow"></div>
 <canvas id="bc"></canvas><div class="hint" id="hint">‹ можно покрутить пальцем ›</div>
 </div><div class="spcap"><span>23 и 30 мл</span><i>✦</i><span>Extrait de Parfum</span><i>✦</i><span>Гарантия стойкости</span></div></section>
+<div class="qban" onclick="openQuiz()"><div class="qi"><img src="img/bleudechanel.jpg?v=1" alt="" loading="lazy"></div><div class="qt"><div class="cap">Тест · 30 секунд</div><h4>Не знаете, <i>что выбрать?</i></h4><span class="qb">Подобрать аромат →</span></div></div>
 <div class="sec rv" id="cat"><h3>Ката<i>лог</i></h3><span class="cap" id="cnt"></span></div>
 <div class="chips" id="chips"></div>
 <div class="grid" id="grid"></div><button class="moreb" id="more" onclick="moreF()">Показать ещё</button><div id="sent"></div>
@@ -204,16 +241,54 @@ const IMGV='1';function media(i,big){return `<img ${big?'class="pbig"':'loading=
 function nts(i){return i.notes.includes('·')?'Ноты: '+i.notes:'Аромат: '+i.notes}
 function render(){chips.innerHTML=`<div class="srch"><input id="qs" type="search" placeholder="Найти аромат или бренд" value="${q.replace(/"/g,'&quot;')}" oninput="q=this.value;shown=999;applyF()"></div><div class="crow">`+GEN.map(([k,t])=>`<button class="chip ${k==gsel?'on':''}" onclick="gsel='${k}';shown=999;render()">${t}</button>`).join('')+`</div><div class="crow">`+FIL.map(x=>`<button class="chip sm ${x==f?'on':''}" onclick="f='${x}';shown=999;render()">${x}</button>`).join('')+`</div>`;applyF()}
 function applyF(){const s=q.trim().toLowerCase();LIST=DATA.filter(i=>(f=='все'||i.fam==f)&&(gsel=='all'||i.g==gsel)&&(!s||(i.brand+' '+i.name+' '+i.notes).toLowerCase().includes(s)));cnt.textContent=LIST.length+' '+(LIST.length%10==1&&LIST.length%100!=11?'аромат':(LIST.length%10>=2&&LIST.length%10<=4&&(LIST.length%100<10||LIST.length%100>=20))?'аромата':'ароматов');draw()}
-function card(i){const pic=!!i.ph;return `<div class="it in ${pic&&f=='все'&&gsel=='all'&&!q?'wide':''}" onclick="openP('${i.id}')"><div class="ph">${media(i)}<span class="no">N°${String(DATA.indexOf(i)+1).padStart(3,'0')}</span><span class="fam">${i.fam}</span></div><div class="b"><div class="br">по мотивам ${i.brand}</div><div class="nm">${i.name}</div><div class="nt">${i.notes} · ${GL[i.g]}</div><div class="row"><span class="price">от ${rub(PRICE[23])}</span><button class="add" aria-label="В корзину" onclick="event.stopPropagation();add('${i.id}',23,this)">+</button></div></div></div>`}
+function card(i){const pic=!!i.ph;return `<div class="it in ${pic&&f=='все'&&gsel=='all'&&!q?'wide':''}" onclick="openP('${i.id}')"><div class="ph">${media(i)}<span class="no">N°${String(DATA.indexOf(i)+1).padStart(3,'0')}</span><span class="fam">${i.fam}</span></div><div class="b"><div class="br">по мотивам ${i.brand}</div><div class="nm">${i.name}</div><div class="nt">${i.notes} · ${GL[i.g]}</div><div class="row"><span class="price">от ${rub(PRICE[23])}</span><span style="font-size:11px;color:#6b5848">23 · 30 мл</span></div><button class="add" onclick="event.stopPropagation();openP('${i.id}')">Выбрать объём</button></div></div>`}
 function draw(){grid.innerHTML=LIST.length?LIST.slice(0,shown).map(card).join(''):'<div class="empty">Ничего не нашли. Попробуйте другое название</div>';more.style.display=shown<LIST.length?'block':'none';more.textContent='Показать ещё · '+(LIST.length-shown);obs()}
 function moreF(){shown+=24;draw()}
 function obs(){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.rv:not(.in)').forEach(e=>io.observe(e))}
-function add(id,v,btn){const k=id+'|'+v;cart[k]=(cart[k]||0)+1;upd();if(btn){btn.textContent='✓';setTimeout(()=>btn.textContent='+',900)}if(inTg&&W.HapticFeedback)W.HapticFeedback.impactOccurred('light')}
+function tst(t){document.querySelectorAll('.tst').forEach(e=>e.remove());const n=document.createElement('div');n.className='tst';n.textContent=t;document.body.appendChild(n);setTimeout(()=>n.remove(),1800)}
+function add(id,v,n){n=n||1;const k=id+'|'+v;cart[k]=(cart[k]||0)+n;upd();const i=byId(id);tst('В корзине: '+i.name+', '+v+' мл'+(n>1?' × '+n:''));if(inTg&&W.HapticFeedback)W.HapticFeedback.impactOccurred('light')}
 const total=()=>Object.entries(cart).reduce((s,[k,q])=>s+PRICE[k.split('|')[1]]*q,0);
 const count=()=>Object.values(cart).reduce((a,b)=>a+b,0);
 function upd(){const n=count();bar.classList.toggle('on',n>0);barN.textContent='Корзина · '+n;barS.textContent=rub(total())}
+
+const QHIT=new Set(['aventus','sauvage','strongerwithyou','invictus','oudwood','eros','bleudechanel','cocomademoiselle','chance','jadore','goodgirl','bombshell','delinaexclusif','yara','lightblue','blackopium','tilia','kirke','tobaccovanille','lostcherry','angelsshare','sideeffect','narcoticdelight','mojaveghost','molecule01','escentric02','blondeamber','gaba','baccaratrouge540','blackafgano','intensecafe','cocovanille','whitechocola','hedonist']);
+const QQ=[
+ {k:'who',t:'Для кого <i>аромат?</i>',o:[['w','Для себя','женский аромат','♀'],['m','Для себя','мужской аромат','♂'],['gw','В подарок ей','','✦'],['gm','В подарок ему','','✦'],['u','Неважно','хочу унисекс','∞']]},
+ {k:'mood',t:'Какое настроение <i>вам ближе?</i>',o:[['свежий','Свежесть','море, цитрусы, утро','~'],['сладкий','Сладость','ваниль, карамель, уют','◦'],['цветочный','Цветы','нежно и романтично','✿'],['фруктовый','Фрукты','сочно и ярко','●'],['deep','Глубина','дерево, специи, вечер','◆']]},
+ {k:'when',t:'Когда будете <i>носить?</i>',o:[['day','Каждый день','','☀'],['office','В офис','','▢'],['night','На вечер и свидание','','☾'],['summer','Летом','','☼'],['winter','Зимой','','❄']]},
+ {k:'trail',t:'Какой шлейф <i>хотите?</i>',o:[['soft','Лёгкий','у кожи, только для вас','·'],['loud','Заметный','чтобы оборачивались','∴']]}];
+const QWHEN={свежий:['day','office','summer'],цветочный:['day','office','summer','night'],фруктовый:['day','summer'],сладкий:['night','winter'],древесный:['office','night','winter','day'],восточный:['night','winter']};
+const QLOUD={свежий:0,цветочный:0,фруктовый:0,древесный:.5,сладкий:1,восточный:1};
+let qst=-1,qa={},quizPick='';
+function qImg(id){return `img/${id}.jpg?v=${IMGV}`}
+function qGender(a,w){if(w=='w'||w=='gw')return a.g=='w'||(a.g=='u'&&w=='w');if(w=='m'||w=='gm')return a.g=='m'||(a.g=='u'&&w=='m');return a.g=='u'}
+function qScore(a){let s=0;const r=[];
+ if(qa.mood=='deep'){if(a.fam=='древесный'||a.fam=='восточный'){s+=6;r.push(a.fam)}}else if(a.fam==qa.mood){s+=6;r.push(a.fam)}
+ if((QWHEN[a.fam]||[]).includes(qa.when)){s+=2;r.push({day:'на каждый день',office:'для офиса',night:'на вечер',summer:'для лета',winter:'для зимы'}[qa.when])}
+ const l=QLOUD[a.fam]??.5;if(qa.trail=='loud'?l>=.5:l<=.5){s+=2;r.push(qa.trail=='loud'?'заметный шлейф':'мягкое звучание')}
+ if(a.g==({w:'w',gw:'w',m:'m',gm:'m',u:'u'}[qa.who]))s+=1;
+ const h=QHIT.has(a.id)?1:0;s+=h*1.5;return {a,s,r,h}}
+function qPick(){const pool=DATA.filter(a=>qGender(a,qa.who)).map(qScore);pool.sort((x,y)=>y.s-x.s||y.h-x.h);return pool.slice(0,3)}
+function openQuiz(){qst=-1;qa={};qDraw();sp.scrollTop=0;show()}
+function qDraw(){const X='<button class="x" onclick="closeS()">×</button>';
+ if(qst<0){sp.innerHTML=X+`<div class="qz"><div class="scr"><div class="cap" style="margin-top:6px">Miracle of fragrance</div><h2 style="margin-top:12px">Найдите <i>свой аромат</i><br>за 30 секунд</h2><p class="qs">Четыре вопроса, и мы подберём из ${DATA.length} ароматов три, которые подойдут именно вам.</p><div class="qhero"><img src="${qImg('gaba')}" alt=""></div><button class="big" onclick="qst=0;qDraw()">Начать тест</button></div></div>`;return}
+ if(qst>=QQ.length)return qResult();
+ const s=QQ[qst];
+ sp.innerHTML=X+`<div class="qz"><div class="top"><button class="back" onclick="qst--;qDraw()">← Назад</button><span class="cap">${qst+1} / ${QQ.length}</span></div><div class="qbar"><i style="width:${qst/QQ.length*100}%"></i></div><div class="scr"><h2>${s.t}</h2><div class="opts">${s.o.map(([v,t,sm,ic])=>`<button class="opt ${qa[s.k]==v?'sel':''}" onclick="qChoose('${s.k}','${v}',this)"><span class="ic">${ic}</span><span>${t}${sm?`<small>${sm}</small>`:''}</span></button>`).join('')}</div></div></div>`;
+ requestAnimationFrame(()=>{const b=sp.querySelector('.qbar i');if(b)b.style.width=((qst+1)/QQ.length*100)+'%'})}
+function qChoose(k,v,el){qa[k]=v;el.classList.add('sel');if(inTg&&W.HapticFeedback)W.HapticFeedback.selectionChanged();setTimeout(()=>{qst++;qDraw();sp.scrollTop=0},230)}
+function qResult(){const [w,...al]=qPick();const pct=x=>Math.min(98,Math.round(70+x.s*2.4));quizPick=w.a.brand+' '+w.a.name;
+ sp.innerHTML=`<button class="x" onclick="closeS()">×</button><div class="qz"><div class="scr"><div class="cap" style="margin-top:6px">Ваш результат</div><h2 style="margin-top:10px">Ваш <i>аромат</i></h2>
+ <div class="win"><div style="position:relative"><span class="match">совпадение ${pct(w)}%</span><img src="${qImg(w.a.id)}" alt=""></div><div class="b"><div class="br">по мотивам ${w.a.brand} · ${GL[w.a.g]}</div><div class="nm">${w.a.name}</div><div class="nt">Ноты: ${w.a.notes}</div><div class="why">${w.r.map(x=>`<span>${x}</span>`).join('')}</div>
+ <button class="big" style="margin-top:14px" onclick="openP('${w.a.id}')">Выбрать объём · от ${rub(PRICE[23])}</button></div></div>
+ <div class="cap" style="margin-top:24px">Вам также подойдут</div>
+ <div class="alts">${al.map(x=>`<button class="qa" onclick="openP('${x.a.id}')"><img src="${qImg(x.a.id)}" alt="" loading="lazy"><div><div class="br">${x.a.brand}</div><div class="nm">${x.a.name}</div></div></button>`).join('')}</div>
+ <div class="qrow" style="margin-top:20px"><button class="big gh" onclick="qa={};qst=0;qDraw();sp.scrollTop=0">Пройти заново</button><button class="big" onclick="qShare()">Поделиться</button></div></div></div>`;sp.scrollTop=0}
+function qShare(){const t='Мой аромат по тесту Miracle: '+quizPick+'. Пройди тест и узнай свой!';const u='https://t.me/Miracle_offragrance';const link='https://t.me/share/url?url='+encodeURIComponent(u)+'&text='+encodeURIComponent(t);
+ try{if(inTg&&W.openTelegramLink){W.openTelegramLink(link);return}}catch(e){}
+ if(navigator.share){navigator.share({text:t,url:u}).catch(()=>{});return}window.open(link,'_blank')}
 function show(){sheet.classList.add('on')}function closeS(){sheet.classList.remove('on')}
-function openP(id){const i=byId(id);let v=23;const draw=()=>{sp.innerHTML=`<button class="x" onclick="closeS()">×</button>${media(i,1)}<div class="pin"><div class="cap">по мотивам ${i.brand} · ${i.fam} · ${GL[i.g]}</div><div class="serif" style="font-size:42px;font-weight:600;line-height:.95;margin-top:8px">${i.name}</div><div style="margin-top:12px;font-size:13px;color:#4a3a2c;line-height:1.6">${nts(i)}.<br>Extrait de Parfum на масляной основе. Гарантия стойкости.</div><div class="seg"><button class="${v==23?'on':''}" id="v23">23 мл · ${rub(PRICE[23])}</button><button class="${v==30?'on':''}" id="v30">30 мл · ${rub(PRICE[30])}</button></div><button class="alt" id="altb">Нужен другой объём? <u>Свяжитесь с менеджером</u></button><button class="big" id="addb">В корзину · ${rub(PRICE[v])}</button></div>`;altb.onclick=()=>leadForm(i);v23.onclick=()=>{v=23;draw()};v30.onclick=()=>{v=30;draw()};addb.onclick=()=>{add(id,v);closeS()}};draw();sp.scrollTop=0;show()}
+function openP(id){const i=byId(id);let v=23,n=1;const draw=()=>{sp.innerHTML=`<button class="x" onclick="closeS()">×</button>${media(i,1)}<div class="pin"><div class="cap">по мотивам ${i.brand} · ${i.fam} · ${GL[i.g]}</div><div class="serif" style="font-size:42px;font-weight:600;line-height:.95;margin-top:8px">${i.name}</div><div style="margin-top:12px;font-size:13px;color:#4a3a2c;line-height:1.6">${nts(i)}.<br>Extrait de Parfum на масляной основе. Гарантия стойкости.</div><div class="seg"><button class="${v==23?'on':''}" id="v23">23 мл · ${rub(PRICE[23])}</button><button class="${v==30?'on':''}" id="v30">30 мл · ${rub(PRICE[30])}</button></div><div class="qn"><span>Количество</span><div><button id="qm">−</button>${n}<button id="qp">+</button></div></div><button class="alt" id="altb">Нужен другой объём? <u>Свяжитесь с менеджером</u></button><button class="big" id="addb">В корзину · ${rub(PRICE[v]*n)}</button></div>`;altb.onclick=()=>leadForm(i);v23.onclick=()=>{v=23;draw()};v30.onclick=()=>{v=30;draw()};qm.onclick=()=>{if(n>1){n--;draw()}};qp.onclick=()=>{n++;draw()};addb.onclick=()=>{add(id,v,n);closeS()}};draw();sp.scrollTop=0;show()}
 function leadForm(i){const u=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;sp.innerHTML=`<button class="x" onclick="closeS()">×</button><div class="pin" style="padding-top:26px"><div class="cap">по мотивам ${i.brand}</div><div class="serif" style="font-size:34px;font-weight:600;line-height:1;margin-top:6px">${i.name}</div><div style="margin-top:10px;font-size:13px;color:#4a3a2c;line-height:1.6">Нужен другой объём? Оставьте контакты, и менеджер напишет вам в Telegram: подскажет объёмы и цену.</div>
 <label>Какой объём нужен</label><input id="lv" placeholder="Например, 50 мл или 100 мл">
 <label>Имя</label><input id="ln" value="${u?(u.first_name||''):''}" placeholder="Как к вам обращаться">
@@ -246,7 +321,7 @@ if(j.ok){promoOk=true;pcm.textContent='Промокод применён: ски
 else{pcm.textContent=j.reason||'Промокод не подходит';pcm.className='pcm bad'}sendLabel()}
 async function send(){if(!fn.value.trim()||!fp.value.trim()||!fc.value.trim()){toast('Заполните имя, телефон и город');return}
 const u=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;
-const order={promo:promoOk?fpc.value.trim().toUpperCase():'',items:Object.entries(cart).map(([k,q])=>{const [id,v]=k.split('|');return {aroma:byId(id).brand+' '+byId(id).name,ml:+v,qty:q,sum:PRICE[v]*q}}),total:total(),name:fn.value,phone:fp.value,city:fc.value,delivery:document.querySelector('[name=d]:checked').value,pay:document.querySelector('[name=pay]:checked').value,comment:fm.value,tg:u?{id:u.id,username:u.username||'',name:(u.first_name||'')+' '+(u.last_name||'')}:null};
+const order={promo:promoOk?fpc.value.trim().toUpperCase():'',items:Object.entries(cart).map(([k,q])=>{const [id,v]=k.split('|');return {aroma:byId(id).brand+' '+byId(id).name,ml:+v,qty:q,sum:PRICE[v]*q}}),total:total(),name:fn.value,phone:fp.value,city:fc.value,delivery:document.querySelector('[name=d]:checked').value,pay:document.querySelector('[name=pay]:checked').value,comment:fm.value+(quizPick?(fm.value?' | ':'')+'Пришёл через тест, результат: '+quizPick:''),tg:u?{id:u.id,username:u.username||'',name:(u.first_name||'')+' '+(u.last_name||'')}:null};
 sendb.disabled=true;sendb.textContent='Отправляем…';let ok=false,no='',paid=finalTotal();
 if(ORDER_URL){try{const r=await fetch(ORDER_URL,{method:'POST',body:JSON.stringify(order)});const j=await r.json();ok=!!j.ok;no=j.no||'';if(j.total)paid=j.total}catch(e){}}
 if(!ok&&!ORDER_URL){ok=true}
