@@ -166,7 +166,7 @@ input,textarea{width:100%;padding:13px 14px;border-radius:12px;border:1px solid 
 .alt{display:block;width:100%;margin:-4px 0 6px;background:var(--card);border:1px dashed rgba(35,26,19,.35);border-radius:14px;font:500 13px Montserrat,system-ui,sans-serif;color:var(--soft);padding:12px 10px}.alt u{color:var(--ink)}
 input,textarea{font-size:16px!important}
 .promo{display:flex;gap:8px}.promo input{flex:1;text-transform:uppercase;letter-spacing:.08em}.promo button{border:1px solid var(--ink);background:none;border-radius:12px;padding:0 16px;font:500 13px Montserrat,system-ui,sans-serif;color:var(--ink)}
-.pcm{font-size:12px;margin-top:8px;min-height:1px}.pcm.good{color:#4f7a3a}.pcm.bad{color:#b0473a}
+.pcm{font-size:12px;margin-top:8px;min-height:1px}.subb{flex:1;border:1px solid var(--ink);background:none;border-radius:12px;padding:10px 8px;font:500 12px Montserrat,system-ui,sans-serif;color:var(--ink)}.subb:first-child{background:var(--ink);color:#f3ece3}.pcm.good{color:#4f7a3a}.pcm.bad{color:#b0473a}
 
 .qban{margin:8px 18px 26px;border-radius:22px;background:var(--ink);color:var(--paper);padding:22px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;position:relative;overflow:hidden}
 .qban:active{transform:scale(.985)}
@@ -387,7 +387,8 @@ pcb.disabled=true;pcb.textContent='…';let j={ok:false,reason:'Не удало�
 try{const r=await fetch(ORDER_URL,{method:'POST',body:JSON.stringify({type:'promo',code,tg:u?{id:u.id}:null})});j=await r.json()}catch(e){}
 pcb.disabled=false;pcb.textContent='Применить';
 if(j.ok){promoOk=true;pcm.textContent='Промокод применён: скидка 20% на первый заказ';pcm.className='pcm good';const d=Math.round(total()*0.2);pcsum.innerHTML=`<div class="line" style="border:none;padding:6px 0"><span>Сумма</span><span>${rub(total())}</span></div><div class="line" style="border:none;padding:6px 0;color:#9a6a3e"><span>Скидка 20%</span><span>−${rub(d)}</span></div><div class="line" style="border:none;padding:6px 0;font-weight:600;font-size:16px"><span>Итого</span><span>${rub(total()-d)}</span></div>`}
-else{pcm.textContent=j.reason||'Промокод не подходит';pcm.className='pcm bad'}sendLabel()}
+else{pcm.className='pcm bad';if(j.sub){pcm.textContent=j.reason;const bx=document.createElement('div');bx.style.cssText='display:flex;gap:8px;margin-top:10px';bx.innerHTML='<button type="button" class="subb" onclick="openChan()">Подписаться на канал</button><button type="button" class="subb" onclick="applyPromo()">Я подписался</button>';pcm.appendChild(bx)}else pcm.textContent=j.reason||'Промокод не подходит'}sendLabel()}
+function openChan(){const l='https://t.me/Miracle_offragrance';try{if(inTg&&W.openTelegramLink)W.openTelegramLink(l);else window.open(l,'_blank')}catch(e){window.open(l,'_blank')}}
 async function send(){if(!fn.value.trim()||!fp.value.trim()||!fc.value.trim()){toast('Заполните имя, телефон и город');return}
 const u=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;
 const order={promo:promoOk?fpc.value.trim().toUpperCase():'',items:Object.entries(cart).map(([k,q])=>{const [id,v]=k.split('|');return {aroma:byId(id).brand+' '+byId(id).name,ml:+v,qty:q,sum:pr(byId(id),v)*q}}),total:total(),name:fn.value,phone:fp.value,city:fc.value,delivery:document.querySelector('[name=d]:checked').value,pay:document.querySelector('[name=pay]:checked').value,comment:fm.value+(quizPick?(fm.value?' | ':'')+'Пришёл через тест, результат: '+quizPick:''),tg:u?{id:u.id,username:u.username||'',name:(u.first_name||'')+' '+(u.last_name||'')}:null};
