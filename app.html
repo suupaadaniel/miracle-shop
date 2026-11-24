@@ -442,4 +442,6 @@ requestAnimationFrame(loop);
 function goCat(){window.scrollTo({top:document.getElementById('cat').getBoundingClientRect().top+scrollY-10,behavior:'smooth'})}
 new IntersectionObserver(e=>{if(e[0].isIntersecting&&shown<LIST.length)moreF()},{rootMargin:'600px'}).observe(sent);
 try{const sp0=(inTg&&W.initDataUnsafe&&W.initDataUnsafe.start_param)||new URLSearchParams(location.search).get('tgWebAppStartParam')||'';if(sp0==='test')setTimeout(openQuiz,350)}catch(e){}
+// счётчик переходов в магазин
+try{let ss=null;try{ss=sessionStorage}catch(e){}if(!ss||!ss.getItem('mv')){try{ss&&ss.setItem('mv','1')}catch(e){}const vsrc=(inTg&&W.initDataUnsafe&&W.initDataUnsafe.start_param)||new URLSearchParams(location.search).get('tgWebAppStartParam')||'';const vu=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;fetch(ORDER_URL,{method:'POST',keepalive:true,body:JSON.stringify({type:'visit',src:vsrc,tg:vu?{id:vu.id,username:vu.username||''}:null})}).catch(()=>{})}}catch(e){}
 </script></body></html>
