@@ -371,7 +371,7 @@ if(!ok){lb.disabled=false;lb.textContent='Отправить менеджеру'
 sp.innerHTML=`<div class="ok"><div class="c">✓</div><div class="serif" style="font-size:32px;font-weight:600">Заявка отправлена</div><div style="margin-top:10px;line-height:1.6;color:#4a3a2c">Менеджер скоро напишет вам в Telegram и подскажет объёмы и цену.</div><button class="big" style="margin-top:22px" onclick="closeS()">Вернуться в каталог</button></div>`}
 function openCart(){const rows=Object.entries(cart);sp.innerHTML=`<button class="x" onclick="closeS()">×</button><div class="pin" style="padding-top:26px"><div class="serif" style="font-size:38px;font-weight:600">Корзина</div>`+rows.map(([k,q])=>{const [id,v]=k.split('|'),i=byId(id);return `<div class="line"><div><div style="font-weight:600">${i.name}</div><div style="font-size:12px;color:#6b5848">${i.brand} · ${v} мл</div></div><div class="qty"><button onclick="chg('${k}',-1)">−</button>${q}<button onclick="chg('${k}',1)">+</button></div><div style="width:74px;text-align:right">${rub(pr(i,v)*q)}</div></div>`}).join('')+`<div class="line" style="border:none;font-weight:600;font-size:16px"><span>Итого</span><span>${rub(total())}</span></div><div class="note">Стоимость доставки рассчитаем после оформления</div><button class="big" onclick="checkout()">Оформить заказ</button></div>`;show()}
 function chg(k,d){cart[k]=Math.max(0,(cart[k]||0)+d);if(!cart[k])delete cart[k];upd();count()?openCart():closeS()}
-function checkout(){promoOk=false;CD={code:0,name:'',mode:'',calc:null,points:[],point:null};const u=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;sp.innerHTML=`<button class="x" onclick="closeS()">×</button><div class="pin" style="padding-top:26px"><div class="serif" style="font-size:38px;font-weight:600">Оформление</div>
+function checkout(){promoOk=false;CD={code:0,name:'',mode:'',calc:null,points:[],point:null};try{if(CDCITIES.length)fetch(ORDER_URL,{method:'POST',body:JSON.stringify({type:'ping'})}).catch(()=>{});else cdApi({type:'cdek_citylist'}).then(j=>{if(j&&j.list&&j.list.length){CDCITIES=j.list;try{localStorage.setItem('cdc_v1',JSON.stringify({t:Date.now(),l:j.list}))}catch(e){}}}).catch(()=>{})}catch(e){}const u=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;sp.innerHTML=`<button class="x" onclick="closeS()">×</button><div class="pin" style="padding-top:26px"><div class="serif" style="font-size:38px;font-weight:600">Оформление</div>
 <label>Имя</label><input id="fn" value="${u?(u.first_name||''):''}" placeholder="Как к вам обращаться">
 <label>Телефон</label><input id="fp" type="tel" placeholder="+7 ___ ___-__-__">
 <label>Доставка СДЭК: город</label><div class="cdc"><input id="fc" placeholder="Начните вводить город" autocomplete="off" oninput="cdCity()"><div id="cdl" class="cdl"></div></div><div id="cdbox"></div>
@@ -395,12 +395,17 @@ const cdEsc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'
 async function cdApi(b){const r=await fetch(ORDER_URL,{method:'POST',body:JSON.stringify(b)});return r.json()}
 function cdPrice(){const m=CD.calc&&CD.calc.modes&&CD.calc.modes[CD.mode];return m?m.sum:0}
 function cdItems(){return Object.entries(cart).map(([k,q])=>{const [id,v]=k.split('|');return {ml:+v,qty:q}})}
+let CDCITIES=[];(()=>{try{const v=JSON.parse(localStorage.getItem('cdc_v1')||'null');if(v&&v.t>Date.now()-7*864e5)CDCITIES=v.l}catch(e){}})();
+const cdNorm=x=>String(x||'').toLowerCase().replace(/ё/g,'е').trim();
+function cdShow(L){cdl._list=L;cdl.innerHTML=L.length?L.map((c,i)=>`<button type="button" onclick="cdPick(${i})">${cdEsc(c.name)}</button>`).join(''):'<div class="cdm" style="padding:10px 14px">Ищем город…</div>';cdl.className='cdl on'}
 function cdCity(){clearTimeout(cdT);if(CD.code&&fc.value!==CD.name){CD={code:0,name:'',mode:'',calc:null,points:[],point:null};cdbox.innerHTML='';sendLabel()}
-const q=fc.value.trim();if(q.length<2){cdl.className='cdl';return}
+const q=fc.value.trim(),nq=cdNorm(q);if(q.length<2){cdl.className='cdl';return}
+const st=[],inc=[];for(const c of CDCITIES){const n=cdNorm(c[1]);if(n.startsWith(nq))st.push(c);else if(nq.length>=3&&n.split(/[\s-]+/).some(w=>w.startsWith(nq)))inc.push(c);if(st.length>=8)break}
+const loc=st.concat(inc).slice(0,8).map(c=>({code:c[0],name:c[2]}));cdShow(loc);
+if(loc.length>=3&&q.length<5)return;
 cdT=setTimeout(async()=>{let j={list:[]};try{j=await cdApi({type:'cdek_cities',q})}catch(e){}
-if(fc.value.trim()!==q)return;const L=j.list||[];
-cdl.innerHTML=L.length?L.map((c,i)=>`<button type="button" onclick="cdPick(${i})">${cdEsc(c.name)}</button>`).join(''):'<div class="cdm" style="padding:10px 14px">Город не найден. Проверьте написание.</div>';
-cdl._list=L;cdl.className='cdl on'},350)}
+if(fc.value.trim()!==q)return;const seen=new Set(loc.map(c=>c.code));const L=loc.concat((j.list||[]).filter(c=>!seen.has(c.code))).slice(0,10);
+if(!L.length){cdl.innerHTML='<div class="cdm" style="padding:10px 14px">Город не найден. Проверьте написание.</div>';cdl._list=[];return}cdShow(L)},300)}
 async function cdPick(i){const c=cdl._list[i];cdl.className='cdl';CD={code:c.code,name:c.name,mode:'',calc:null,points:[],point:null};fc.value=c.name;
 cdbox.innerHTML='<div class="cdm">Считаем доставку…</div>';
 let calc=null,pts={list:[]};try{[calc,pts]=await Promise.all([cdApi({type:'cdek_calc',city_code:c.code,items:cdItems()}),cdApi({type:'cdek_points',city_code:c.code}).catch(()=>({list:[]}))])}catch(e){}
@@ -416,7 +421,7 @@ else if(CD.mode){h+=CD.point?`<div class="cdsel"><b>${cdEsc(CD.point.a)}</b><br>
 cdbox.innerHTML=h;if(CD.mode&&CD.mode!='door'&&!CD.point)cdPts();sendLabel()}
 function cdPts(){const q=(window.cdq&&cdq.value||'').toLowerCase().trim();const L=CD.points.filter(p=>p.t==CD.mode&&(!q||p.a.toLowerCase().includes(q))).slice(0,40);
 cdp.innerHTML=L.length?L.map(p=>`<button type="button" onclick="cdPoint('${cdEsc(p.c)}')">${cdEsc(p.a)}<small>${cdEsc(p.w)}</small></button>`).join(''):'<div class="cdm" style="padding:10px 14px">Ничего не найдено</div>'}
-function cdAddrInit(){const p=String(CD.name||'').split(',').map(x=>x.trim()).filter(Boolean);return {country:p.length>1?p[p.length-1]:'Россия',city:p[0]||'',street:'',house:'',flat:'',entrance:'',floor:''}}
+function cdAddrInit(){const p=String(CD.name||'').split(',').map(x=>x.trim()).filter(Boolean);const KC=['Россия','Беларусь','Казахстан','Узбекистан','Армения','Киргизия','Кыргызстан','Таджикистан','Грузия','Азербайджан'];return {country:KC.includes(p[p.length-1])?p[p.length-1]:'Россия',city:p[0]||'',street:'',house:'',flat:'',entrance:'',floor:''}}
 function cdDoor(){const A=CD.addr||{};return [A.street,A.house&&'д. '+A.house,A.flat&&'кв. '+A.flat,A.entrance&&'подъезд '+A.entrance,A.floor&&'этаж '+A.floor].filter(x=>x&&String(x).trim()).join(', ')}
 let cdDT=0;function cdDoorCalc(){clearTimeout(cdDT);const A=CD.addr||{};if(!(A.street||'').trim()||!(A.house||'').trim())return;const code=CD.code,addr=(A.city||'')+', '+cdDoor();cdDT=setTimeout(async()=>{if(window.cdan)cdan.textContent='Уточняем цену по адресу…';let r=null;try{r=await cdApi({type:'cdek_calc',city_code:code,items:cdItems(),address:addr})}catch(e){}
 if(CD.code!==code||CD.mode!=='door')return;const x=r&&r.ok&&r.modes&&r.modes.door;if(!x){if(window.cdan)cdan.textContent='';return}CD.calc.modes.door=x;const t=`${x.sum} ₽ · ${x.min}${x.max!=x.min?'–'+x.max:''} дн.`;if(window.cdpr_door)cdpr_door.textContent=t;if(window.cdan)cdan.textContent='Цена доставки по вашему адресу: '+t;sendLabel()},900)}
