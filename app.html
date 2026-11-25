@@ -166,7 +166,7 @@ input,textarea{width:100%;padding:13px 14px;border-radius:12px;border:1px solid 
 .alt{display:block;width:100%;margin:-4px 0 6px;background:var(--card);border:1px dashed rgba(35,26,19,.35);border-radius:14px;font:500 13px Montserrat,system-ui,sans-serif;color:var(--soft);padding:12px 10px}.alt u{color:var(--ink)}
 input,textarea{font-size:16px!important}
 .promo{display:flex;gap:8px}.promo input{flex:1;text-transform:uppercase;letter-spacing:.08em}.promo button{border:1px solid var(--ink);background:none;border-radius:12px;padding:0 16px;font:500 13px Montserrat,system-ui,sans-serif;color:var(--ink)}
-.pcm{font-size:12px;margin-top:8px;min-height:1px}.subb{flex:1;border:1px solid var(--ink);background:none;border-radius:12px;padding:10px 8px;font:500 12px Montserrat,system-ui,sans-serif;color:var(--ink)}.subb:first-child{background:var(--ink);color:#f3ece3}.pcm.good{color:#4f7a3a}.pcm.bad{color:#b0473a}
+.pcm{font-size:12px;margin-top:8px;min-height:1px}.cdc{position:relative}.cdl{position:absolute;left:0;right:0;top:100%;z-index:20;background:var(--card,#fff);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 24px rgba(0,0,0,.08);max-height:260px;overflow:auto;display:none}.cdl.on{display:block}.cdl button{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:11px 14px;font:500 13px Montserrat,system-ui,sans-serif;color:var(--ink)}.cdm{font-size:12px;color:#8a7a6c;margin:8px 0}.cdp{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:8px}.cdp button{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 14px;font:500 13px/1.4 Montserrat,system-ui,sans-serif;color:var(--ink)}.cdp button.on{background:#efe4d4}.cdp small{display:block;color:#8a7a6c;font-size:11px}.cdsel{margin-top:8px;padding:10px 14px;border-radius:12px;background:#efe4d4;font-size:13px;line-height:1.4}.subb{flex:1;border:1px solid var(--ink);background:none;border-radius:12px;padding:10px 8px;font:500 12px Montserrat,system-ui,sans-serif;color:var(--ink)}.subb:first-child{background:var(--ink);color:#f3ece3}.pcm.good{color:#4f7a3a}.pcm.bad{color:#b0473a}
 
 .qban{margin:8px 18px 26px;border-radius:22px;background:var(--ink);color:var(--paper);padding:22px 20px;display:flex;align-items:center;gap:16px;cursor:pointer;position:relative;overflow:hidden}
 .qban:active{transform:scale(.985)}
@@ -371,16 +371,15 @@ if(!ok){lb.disabled=false;lb.textContent='Отправить менеджеру'
 sp.innerHTML=`<div class="ok"><div class="c">✓</div><div class="serif" style="font-size:32px;font-weight:600">Заявка отправлена</div><div style="margin-top:10px;line-height:1.6;color:#4a3a2c">Менеджер скоро напишет вам в Telegram и подскажет объёмы и цену.</div><button class="big" style="margin-top:22px" onclick="closeS()">Вернуться в каталог</button></div>`}
 function openCart(){const rows=Object.entries(cart);sp.innerHTML=`<button class="x" onclick="closeS()">×</button><div class="pin" style="padding-top:26px"><div class="serif" style="font-size:38px;font-weight:600">Корзина</div>`+rows.map(([k,q])=>{const [id,v]=k.split('|'),i=byId(id);return `<div class="line"><div><div style="font-weight:600">${i.name}</div><div style="font-size:12px;color:#6b5848">${i.brand} · ${v} мл</div></div><div class="qty"><button onclick="chg('${k}',-1)">−</button>${q}<button onclick="chg('${k}',1)">+</button></div><div style="width:74px;text-align:right">${rub(pr(i,v)*q)}</div></div>`}).join('')+`<div class="line" style="border:none;font-weight:600;font-size:16px"><span>Итого</span><span>${rub(total())}</span></div><div class="note">Стоимость доставки рассчитаем после оформления</div><button class="big" onclick="checkout()">Оформить заказ</button></div>`;show()}
 function chg(k,d){cart[k]=Math.max(0,(cart[k]||0)+d);if(!cart[k])delete cart[k];upd();count()?openCart():closeS()}
-function checkout(){promoOk=false;const u=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;sp.innerHTML=`<button class="x" onclick="closeS()">×</button><div class="pin" style="padding-top:26px"><div class="serif" style="font-size:38px;font-weight:600">Оформление</div>
+function checkout(){promoOk=false;CD={code:0,name:'',mode:'',calc:null,points:[],point:null};const u=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;sp.innerHTML=`<button class="x" onclick="closeS()">×</button><div class="pin" style="padding-top:26px"><div class="serif" style="font-size:38px;font-weight:600">Оформление</div>
 <label>Имя</label><input id="fn" value="${u?(u.first_name||''):''}" placeholder="Как к вам обращаться">
 <label>Телефон</label><input id="fp" type="tel" placeholder="+7 ___ ___-__-__">
-<label>Город и пункт выдачи</label><input id="fc" placeholder="Город, адрес пункта выдачи">
-<label>Доставка</label>${['СДЭК','Яндекс Доставка','Ozon'].map((x,j)=>`<label class="opt"><input type="radio" name="d" value="${x}" ${j==0?'checked':''}>${x}</label>`).join('')}
+<label>Доставка СДЭК: город</label><div class="cdc"><input id="fc" placeholder="Начните вводить город" autocomplete="off" oninput="cdCity()"><div id="cdl" class="cdl"></div></div><div id="cdbox"></div>
 <label>Оплата</label>${['СБП / перевод на карту','Ссылка на оплату картой'].map((x,j)=>`<label class="opt"><input type="radio" name="pay" value="${x}" ${j==0?'checked':''}>${x}</label>`).join('')}
 <label>Комментарий</label><textarea id="fm" rows="2" placeholder="Например, подарочная упаковка"></textarea>
 <label>Промокод</label><div class="promo"><input id="fpc" placeholder="Если есть" autocapitalize="characters"><button type="button" id="pcb" onclick="applyPromo()">Применить</button></div><div id="pcm" class="pcm"></div><div id="pcsum"></div><button class="big" id="sendb" onclick="send()">Подтвердить заказ · ${rub(total())}</button><div class="note">Менеджер свяжется с вами в Telegram, подтвердит заказ, доставку и пришлёт реквизиты для оплаты.</div></div>`}
-let promoOk=false;const finalTotal=()=>promoOk?total()-Math.round(total()*0.2):total();
-function sendLabel(){sendb.textContent='Подтвердить заказ · '+rub(finalTotal())}
+let promoOk=false;const finalTotal=()=>(promoOk?total()-Math.round(total()*0.2):total())+cdPrice();
+function sendLabel(){sendb.textContent='Подтвердить заказ · '+rub(finalTotal())+(cdPrice()?' с доставкой':'')}
 async function applyPromo(){const code=fpc.value.trim().toUpperCase();const u=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;promoOk=false;pcsum.innerHTML='';
 if(!code){pcm.textContent='Введите промокод';pcm.className='pcm bad';sendLabel();return}
 pcb.disabled=true;pcb.textContent='…';let j={ok:false,reason:'Не удалось проверить, попробуйте ещё раз'};
@@ -389,9 +388,45 @@ pcb.disabled=false;pcb.textContent='Применить';
 if(j.ok){promoOk=true;pcm.textContent='Промокод применён: скидка 20% на первый заказ';pcm.className='pcm good';const d=Math.round(total()*0.2);pcsum.innerHTML=`<div class="line" style="border:none;padding:6px 0"><span>Сумма</span><span>${rub(total())}</span></div><div class="line" style="border:none;padding:6px 0;color:#9a6a3e"><span>Скидка 20%</span><span>−${rub(d)}</span></div><div class="line" style="border:none;padding:6px 0;font-weight:600;font-size:16px"><span>Итого</span><span>${rub(total()-d)}</span></div>`}
 else{pcm.className='pcm bad';if(j.sub){pcm.textContent=j.reason;const bx=document.createElement('div');bx.style.cssText='display:flex;gap:8px;margin-top:10px';bx.innerHTML='<button type="button" class="subb" onclick="openChan()">Подписаться на канал</button><button type="button" class="subb" onclick="applyPromo()">Я подписался</button>';pcm.appendChild(bx)}else pcm.textContent=j.reason||'Промокод не подходит'}sendLabel()}
 function openChan(){const l='https://t.me/Miracle_offragrance';try{if(inTg&&W.openTelegramLink)W.openTelegramLink(l);else window.open(l,'_blank')}catch(e){window.open(l,'_blank')}}
-async function send(){if(!fn.value.trim()||!fp.value.trim()||!fc.value.trim()){toast('Заполните имя, телефон и город');return}
+// ===== СДЭК: город, пункт выдачи, расчёт =====
+let CD={code:0,name:'',mode:'',calc:null,points:[],point:null},cdT=0;
+const CDN={pvz:'Пункт выдачи СДЭК',postamat:'Постамат СДЭК',door:'Курьер до двери'};
+const cdEsc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function cdApi(b){const r=await fetch(ORDER_URL,{method:'POST',body:JSON.stringify(b)});return r.json()}
+function cdPrice(){const m=CD.calc&&CD.calc.modes&&CD.calc.modes[CD.mode];return m?m.sum:0}
+function cdItems(){return Object.entries(cart).map(([k,q])=>{const [id,v]=k.split('|');return {ml:+v,qty:q}})}
+function cdCity(){clearTimeout(cdT);if(CD.code&&fc.value!==CD.name){CD={code:0,name:'',mode:'',calc:null,points:[],point:null};cdbox.innerHTML='';sendLabel()}
+const q=fc.value.trim();if(q.length<2){cdl.className='cdl';return}
+cdT=setTimeout(async()=>{let j={list:[]};try{j=await cdApi({type:'cdek_cities',q})}catch(e){}
+if(fc.value.trim()!==q)return;const L=j.list||[];
+cdl.innerHTML=L.length?L.map((c,i)=>`<button type="button" onclick="cdPick(${i})">${cdEsc(c.name)}</button>`).join(''):'<div class="cdm" style="padding:10px 14px">Город не найден. Проверьте написание.</div>';
+cdl._list=L;cdl.className='cdl on'},350)}
+async function cdPick(i){const c=cdl._list[i];cdl.className='cdl';CD={code:c.code,name:c.name,mode:'',calc:null,points:[],point:null};fc.value=c.name;
+cdbox.innerHTML='<div class="cdm">Считаем доставку…</div>';
+let calc=null,pts={list:[]};try{[calc,pts]=await Promise.all([cdApi({type:'cdek_calc',city_code:c.code,items:cdItems()}),cdApi({type:'cdek_points',city_code:c.code}).catch(()=>({list:[]}))])}catch(e){}
+if(CD.code!==c.code)return;
+if(!calc||!calc.ok){CD.mode='manual';cdbox.innerHTML='<div class="cdm">Не получилось рассчитать доставку автоматически. Укажите адрес, и менеджер рассчитает стоимость.</div><input id="cdd" placeholder="Адрес или пункт выдачи">';sendLabel();return}
+CD.calc=calc;CD.points=(pts&&pts.list)||[];const ms=['pvz','postamat','door'].filter(k=>calc.modes[k]&&(k=='door'||CD.points.some(p=>p.t==k)));
+if(!ms.length&&calc.modes.door)ms.push('door');CD.mode=ms[0]||'';cdDraw(ms)}
+function cdDraw(ms){ms=ms||['pvz','postamat','door'].filter(k=>CD.calc.modes[k]&&(k=='door'||CD.points.some(p=>p.t==k)));
+const d=(m)=>{const x=CD.calc.modes[m];return `${x.sum} ₽ · ${x.min}${x.max!=x.min?'–'+x.max:''} дн.`};
+let h=ms.map(m=>`<label class="opt"><input type="radio" name="cdm" value="${m}" ${CD.mode==m?'checked':''} onchange="CD.mode='${m}';CD.point=null;cdDraw()"><span style="flex:1">${CDN[m]}</span><b style="font-weight:600">${d(m)}</b></label>`).join('');
+if(CD.mode=='door')h+=`<label>Адрес доставки</label><input id="cdd" placeholder="Улица, дом, квартира" value="${cdEsc(CD.door||'')}" oninput="CD.door=this.value">`;
+else if(CD.mode){h+=CD.point?`<div class="cdsel"><b>${cdEsc(CD.point.a)}</b><br><small>${cdEsc(CD.point.w)}</small><br><a href="#" onclick="CD.point=null;cdDraw();return false" style="color:#9a6a3e">Выбрать другой</a></div>`:`<input id="cdq" placeholder="Поиск по адресу пункта" oninput="cdPts()" style="margin-top:4px"><div id="cdp" class="cdp"></div>`}
+cdbox.innerHTML=h;if(CD.mode&&CD.mode!='door'&&!CD.point)cdPts();sendLabel()}
+function cdPts(){const q=(window.cdq&&cdq.value||'').toLowerCase().trim();const L=CD.points.filter(p=>p.t==CD.mode&&(!q||p.a.toLowerCase().includes(q))).slice(0,40);
+cdp.innerHTML=L.length?L.map(p=>`<button type="button" onclick="cdPoint('${cdEsc(p.c)}')">${cdEsc(p.a)}<small>${cdEsc(p.w)}</small></button>`).join(''):'<div class="cdm" style="padding:10px 14px">Ничего не найдено</div>'}
+function cdPoint(c){CD.point=CD.points.find(p=>p.c===c)||null;cdDraw()}
+function cdCheck(){if(!CD.code){return fc.value.trim()?'Выберите город из списка подсказок':'Укажите город доставки'}
+if(CD.mode=='manual')return (window.cdd&&cdd.value.trim())?'':'Укажите адрес доставки';
+if(CD.mode=='door')return (CD.door||'').trim()?'':'Укажите адрес для курьера';
+if(!CD.mode)return 'Выберите способ доставки';return CD.point?'':'Выберите пункт выдачи'}
+function cdLabel(){return CD.mode&&CD.mode!='manual'?'СДЭК: '+CDN[CD.mode].replace(' СДЭК','').toLowerCase()+' · '+cdPrice()+' ₽':'СДЭК (рассчитает менеджер)'}
+function cdPlace(){if(CD.mode=='manual')return CD.name+', '+((window.cdd&&cdd.value)||'');if(CD.mode=='door')return CD.name+', '+(CD.door||'');return CD.name+(CD.point?', '+CD.point.a+' ('+CD.point.c+')':'')}
+function cdPayload(){if(!CD.code||!CD.mode||CD.mode=='manual')return null;return {mode:CD.mode,city_code:CD.code,city_name:CD.name,point_code:CD.point?CD.point.c:'',point_addr:CD.point?CD.point.a:'',door:CD.door||''}}
+async function send(){if(!fn.value.trim()||!fp.value.trim()){toast('Заполните имя и телефон');return}const cdErr=cdCheck();if(cdErr){toast(cdErr);return}
 const u=inTg&&W.initDataUnsafe&&W.initDataUnsafe.user;
-const order={promo:promoOk?fpc.value.trim().toUpperCase():'',items:Object.entries(cart).map(([k,q])=>{const [id,v]=k.split('|');return {aroma:byId(id).brand+' '+byId(id).name,ml:+v,qty:q,sum:pr(byId(id),v)*q}}),total:total(),name:fn.value,phone:fp.value,city:fc.value,delivery:document.querySelector('[name=d]:checked').value,pay:document.querySelector('[name=pay]:checked').value,comment:fm.value+(quizPick?(fm.value?' | ':'')+'Пришёл через тест, результат: '+quizPick:''),tg:u?{id:u.id,username:u.username||'',name:(u.first_name||'')+' '+(u.last_name||'')}:null};
+const order={promo:promoOk?fpc.value.trim().toUpperCase():'',items:Object.entries(cart).map(([k,q])=>{const [id,v]=k.split('|');return {aroma:byId(id).brand+' '+byId(id).name,ml:+v,qty:q,sum:pr(byId(id),v)*q}}),total:total(),name:fn.value,phone:fp.value,city:cdPlace(),delivery:cdLabel(),cdek:cdPayload(),pay:document.querySelector('[name=pay]:checked').value,comment:fm.value+(quizPick?(fm.value?' | ':'')+'Пришёл через тест, результат: '+quizPick:''),tg:u?{id:u.id,username:u.username||'',name:(u.first_name||'')+' '+(u.last_name||'')}:null};
 sendb.disabled=true;sendb.textContent='Отправляем…';let ok=false,no='',paid=finalTotal();order.wa=await askWrite();
 if(ORDER_URL){try{const r=await fetch(ORDER_URL,{method:'POST',body:JSON.stringify(order)});const j=await r.json();ok=!!j.ok;no=j.no||'';if(j.total)paid=j.total}catch(e){}}
 if(!ok&&!ORDER_URL){ok=true}
